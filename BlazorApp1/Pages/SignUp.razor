@@ -1,0 +1,68 @@
+﻿@page "/signup"
+@inject HttpClient HttpClient
+
+<div class="form-container">
+    <h2 class="form-heading">Register</h2>
+<EditForm Model="@SignUpModel" OnSubmit="@HandleSubmit">
+    <div class="form-group">
+        <label for="firstName">First Name</label>
+        <InputText id="firstName" @bind-Value="SignUpModel.firstName" class="form-control" />
+        <ValidationMessage For="@(() => SignUpModel.firstName)" />
+    </div>
+
+    <div class="form-group">
+        <label for="lastName">Last Name</label>
+        <InputText id="lastName" @bind-Value="SignUpModel.lastName" class="form-control" />
+        <ValidationMessage For="@(() => SignUpModel.lastName)" />
+    </div>
+
+    <div class="form-group">
+        <label for="email">Email</label>
+        <InputText id="email" @bind-Value="SignUpModel.email" class="form-control" />
+        <ValidationMessage For="@(() => SignUpModel.email)" />
+    </div>
+
+    <div class="form-group">
+        <label for="contactno">Contact Number</label>
+        <InputNumber id="contactno" @bind-Value="SignUpModel.contactNo" class="form-control" />
+        <ValidationMessage For="@(() => SignUpModel.contactNo)" />
+    </div>
+
+    <div class="form-group">
+        <label for="password">Password</label>
+        <InputText id="password" @bind-Value="SignUpModel.password" type="password" class="form-control" />
+        <ValidationMessage For="@(() => SignUpModel.password)" />
+    </div>
+
+    <div class="form-group">
+        <label for="address">Address</label>
+        <InputTextArea id="address" @bind-Value="SignUpModel.address" class="form-control" />
+        <ValidationMessage For="@(() => SignUpModel.address)" />
+    </div>
+
+    <button type="submit" class="btn btn-primary">Submit</button>
+</EditForm>
+</div>
+
+
+@code {
+    private RegisterUser SignUpModel = new RegisterUser();
+    private async Task HandleSubmit()
+    {
+        // Make an HTTP POST request to the API endpoint
+        var response = await HttpClient.PostAsJsonAsync("http://192.180.0.192:5656/api/v1/user/register", SignUpModel);
+
+        // Check if the response is successful
+        if (response.IsSuccessStatusCode)
+        {
+            // Handle success
+            Console.WriteLine("Signup successful!");
+        }
+        else
+        {
+            // Handle error
+            Console.WriteLine($"Error: {response.StatusCode} - {response.ReasonPhrase}");
+        }
+    }
+
+}
